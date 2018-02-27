@@ -7,13 +7,13 @@ exports.interactionType = 'swipe'; // swipe or tap
 
 exports.fallUpwards = false; // direction of fall 
 
-exports.fallStyle = 'elastic'; // bounce or elastic
+exports.fallStyle = 'bounce'; // bounce or elastic
 
-exports.tileBounce = 0.5; // number between 0 and 1
+exports.tileBounce = 0.3; // number between 0 and 1
 
 exports.gravity = 1; // gravity strength
 
-exports.piecePadding = '15%'; // padding around the pieces on the board
+exports.piecePadding = '25%'; // padding around the pieces on the board
 
 exports.belowPiecePadding = '-10%'; // padding around the pieces under the board
 
@@ -23,7 +23,7 @@ exports.removeGoalPanelOnComplete = true; // when all interactions are complete 
 
 exports.timer = false; // hide close button until interaction/autoplay
 
-exports.timerDuration = 1000; // time until close button will appear after first interaction
+exports.timerDuration = 0; // time until close button will appear after first interaction
 
 exports.interactionDelay = 0; // delay between tooltip hide and actual board interaction
 
@@ -38,14 +38,16 @@ exports.lang = 'en'; // the current language of the end card
 /********************* INTERACTIONS *********************/
 
 exports.interaction1 = {
-    highlightTiles: [{ x: 3, y: 4 }, { x: 3, y: 3 }], // tiles to highlight
-    arrow: { dir: 'left' }, // arrow direction
+    highlightTiles: [{ x: 4, y: 3 }, { x: 4, y: 2 }], // tiles to interact 
+    highlightOtherTiles: [{ x: 2, y: 2}, {x: 4, y: 2}], // other tiles to highlight
+    arrow: { dir: 'right' }, // arrow direction
     tooltip: '{{tooltip1}}' // tooltip text
 };
 
 exports.interaction2 = {
-    highlightTiles: [{ x: 3, y: 3 }, { x: 4, y: 3 }], // tiles to highlight
-    arrow: { dir: 'left' }, // arrow direction
+    highlightTiles: [{ x: 3, y: 2 }, { x: 3, y: 3 }], // tiles to interact
+    highlightOtherTiles: [{ x: 2, y: 3}, {x: 5, y: 3}], // tiles to highlight
+    arrow: { dir: 'right' }, // arrow direction
     tooltip: '{{tooltip2}}' // tooltip text
 };
 
@@ -56,24 +58,25 @@ exports.tooltipTextStrokeThickness = 0;
 
 /********************* GOALS (OPTIONAL) *********************/
 
-exports.goal1 = {
-    item: 'collectable01', // this should match name in setup/pieces directory
-    amount: 2 // the amount to collect
-};
-
 exports.goal2 = {
-    item: 'piece04', // this should match name in setup/pieces directory
-    amount: 10 // the amount to collect
+    item: 'piece01', // this should match name in setup/pieces directory
+    amount: 4, // the amount to collect
+    collected: 0 // the amount collected
 };
 
 exports.goal3 = {
-    item: 'piece03', // this should match name in setup/pieces directory
-    amount: 10 // the amount to collect
-};
+    item: 'piece04', // this should match name in setup/pieces directory
+    amount: 3, // the amount to collect
+    collected: 0 //the amount collected
+}
+// exports.goal3 = {
+//     item: 'piece02', // this should match name in setup/pieces directory
+//     amount: 3 // the amount to collect
+// };
 
 // goal text colors
-exports.goalTextFill = '#ffffff';
-exports.goalTextStroke = '#000000';
+exports.goalTextFill = '#ba8b50';
+exports.goalTextStroke = '#ffffff';
 exports.goalTextStrokeThickness = 6;
 
 // goal panel config
@@ -85,18 +88,19 @@ exports.goalPanelAngleLandscape = 0;
 /********************* BOOSTERS (optional) *********************/
 
 exports.booster01 = {
-    name: 'rocket', // boster name
-    destroys: 'blast1', // choose from: horizontal, vertical, horizontalAndVertical, blast1, blast2
-    delay: 300, // the delay before tiles fall
+    // name: 'rocket', // boster name
+    // destroys: 'blast1', // choose from: horizontal, vertical, horizontalAndVertical, blast1, blast2
+    delay: 600, // the delay before tiles fall
+    animation: 'booster01-destroy',
     piecesToCreate: '4-horizontal' // choose from: 4-horizontal, 4-vertical, mixture, 5-in-a-line
 };
 
-exports.booster02 = {
-    name: 'bomb', // boster name
-    destroys: 'blast2', // choose from: horizontal, vertical, horizontalAndVertical, blast1, blast2
-    delay: 300, // the delay before tiles fall
-    piecesToCreate: 'mixture' // choose from: 4-horizontal, 4-vertical, mixture, 5-in-a-line
-};
+// exports.booster02 = {
+//     name: 'bomb', // boster name
+//     destroys: 'blast2', // choose from: horizontal, vertical, horizontalAndVertical, blast1, blast2
+//     delay: 300, // the delay before tiles fall
+//     piecesToCreate: 'mixture' // choose from: 4-horizontal, 4-vertical, mixture, 5-in-a-line
+// };
 
 /********************* ON USER WINS *********************/
 
@@ -121,11 +125,26 @@ exports.logoAnimationDuration = 1000; // animation duration
 
 var customEffects = {};
 
-customEffects['ostin'] = { // name should either match directory in setup/animations or an image in assets
+customEffects['hunter'] = { // name should either match directory in setup/animations or an image in assets
     fps: 10,
     loop: true,
     delay: 0,
-    htmlId: 'ostin', // the id in the html where this will be placed (note also accepts an array)
+    htmlId: 'hunter', // the id in the html where this will be placed (note also accepts an array)
+    showOn: 'win', // should this show at startup
+    animations: [{ // move this item when user wins
+        y: '-100%',
+        easing: 'QuadraticOut', // see possible easings (above)
+        delay: 0,
+        duration: 1000,
+        animation: 'moveTo'
+    }]
+};
+
+customEffects['amelia'] = { // name should either match directory in setup/animations or an image in assets
+    fps: 10,
+    loop: true,
+    delay: 0,
+    htmlId: 'amelia', // the id in the html where this will be placed (note also accepts an array)
     showOn: 'win', // should this show at startup
     animations: [{ // move this item when user wins
         y: '-100%',
@@ -137,7 +156,7 @@ customEffects['ostin'] = { // name should either match directory in setup/animat
 };
 
 customEffects['cascade'] = { // name should either match directory in setup/animations or an image in assets
-    fps: 60,
+    fps: 30,
     loop: true,
     delay: 0,
     htmlId: ['cascade-1', 'cascade-2', 'cascade-3', 'cascade-4'], // the id in the html where this will be placed (note also accepts an array)
@@ -170,40 +189,14 @@ exports.customEffects = customEffects;
 
 var animations = {};
 
-animations['piece01-destroy'] = {
+animations['piece-destroy'] = {
     fps: 30,
-    scale: 1
-};
-
-animations['piece02-destroy'] = {
-    fps: 30,
-    scale: 1
-};
-
-animations['piece03-destroy'] = {
-    fps: 30,
-    scale: 1
-};
-
-animations['piece04-destroy'] = {
-    fps: 30,
-    scale: 1
-};
-
-animations['piece05-destroy'] = {
-    fps: 30,
-    loop: false,
     scale: 1
 };
 
 animations['booster01-destroy'] = {
-    fps: 30,
+    fps: 50,
     scale: 1.5
-};
-
-animations['booster02-destroy'] = {
-    fps: 30,
-    scale: 1
 };
 
 // todo: 

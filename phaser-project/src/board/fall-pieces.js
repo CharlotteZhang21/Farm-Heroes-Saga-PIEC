@@ -2,7 +2,7 @@ export default
 { "height":14,
  "layers":[
         {
-         "data":[3, 6, 7, 4, 4, 3, 3, 6, 4, 3, 3, 7, 6, 4, 4, 3, 3, 4, 4, 3, 3, 4, 6, 4, 3, 6, 5, 5, 3, 4, 4, 6, 7, 5, 7, 3, 5, 5, 3, 6, 4, 3, 7, 3, 7, 3, 7, 5, 4, 7, 4, 4, 6, 5, 7, 7, 6, 5, 5, 4, 6, 6, 3, 4, 7, 3, 4, 7, 3, 6, 7, 7, 3, 5, 4, 7, 7, 3, 5, 6, 4, 5, 5, 7, 6, 7, 7, 4, 4, 6, 3, 4, 4, 5, 7, 3, 6, 4],
+         "data":[6, 4, 2, 4, 3, 3, 3, 6, 5, 6, 5, 7, 7, 3, 3, 5, 3, 2, 4, 6, 6, 5, 4, 7, 2, 3, 2, 7, 4, 4, 4, 5, 6, 7, 5, 4, 5, 6, 5, 5, 3, 5, 4, 5, 4, 5, 7, 2, 5, 2, 3, 3, 4, 6, 7, 3, 7, 5, 4, 6, 2, 5, 2, 3, 2, 3, 4, 7, 3, 2, 5, 3, 7, 6, 6, 5, 6, 4, 3, 4, 3, 4, 5, 5, 7, 4, 6, 4, 6, 5, 3, 5, 6, 3, 4, 3, 4, 4],
          "height":14,
          "name":"fall-pieces",
          "opacity":1,
@@ -15,8 +15,8 @@ export default
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.0.2",
- "tileheight":415,
+ "tiledversion":"1.0.3",
+ "tileheight":207,
  "tilesets":[
         {
          "columns":0,
@@ -30,68 +30,50 @@ export default
          "margin":0,
          "name":"pieces",
          "spacing":0,
-         "tilecount":9,
-         "tileheight":415,
+         "tilecount":6,
+         "tileheight":200,
          "tiles":
             {
-             "0":
-                {
-                 "image":"..\/..\/pieces\/booster01.png",
-                 "imageheight":415,
-                 "imagewidth":415
-                },
              "1":
                 {
-                 "image":"..\/..\/pieces\/booster02.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "image":"..\/..\/pieces\/piece06.png",
+                 "imageheight":200,
+                 "imagewidth":200
                 },
              "2":
                 {
                  "image":"..\/..\/pieces\/piece01.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "imageheight":200,
+                 "imagewidth":200
                 },
              "3":
                 {
                  "image":"..\/..\/pieces\/piece02.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "imageheight":200,
+                 "imagewidth":200
                 },
              "4":
                 {
                  "image":"..\/..\/pieces\/piece03.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "imageheight":200,
+                 "imagewidth":200
                 },
              "5":
                 {
                  "image":"..\/..\/pieces\/piece04.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "imageheight":200,
+                 "imagewidth":200
                 },
              "6":
                 {
                  "image":"..\/..\/pieces\/piece05.png",
-                 "imageheight":415,
-                 "imagewidth":415
-                },
-             "7":
-                {
-                 "image":"..\/..\/pieces\/piece06.png",
-                 "imageheight":415,
-                 "imagewidth":415
-                },
-             "8":
-                {
-                 "image":"..\/..\/pieces\/piece07.png",
-                 "imageheight":415,
-                 "imagewidth":415
+                 "imageheight":200,
+                 "imagewidth":200
                 }
             },
-         "tilewidth":415
+         "tilewidth":200
         }],
- "tilewidth":415,
+ "tilewidth":207,
  "type":"map",
  "version":1,
  "width":7

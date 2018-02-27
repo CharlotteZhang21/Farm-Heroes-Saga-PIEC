@@ -65,8 +65,12 @@ class Goal extends Phaser.Group {
     }
 
     createText(goal, el) {
+        
 
-        var txt = new Phaser.Text(this.game, 0, 0, goal.amount, {
+        
+        var goalText =  goal.collected + "/" + goal.amount;
+
+        var txt = new Phaser.Text(this.game, 0, 0, goalText, {
             font: '100px mainfont',
             fill: Settings.goalTextFill,
             stroke: Settings.goalTextStroke,
@@ -82,6 +86,9 @@ class Goal extends Phaser.Group {
 
         this[el].origScale = this[el].scale.x;
 
+        this[el].collected = goal.collected;
+        this[el].amount = goal.amount;
+
         Util.textToDom(el, txt);
 
         this.add(txt);
@@ -92,12 +99,10 @@ class Goal extends Phaser.Group {
         var key = info.replace('item', 'text');
 
         var txt = this[key];
+        
+        txt.collected++;
 
-        var amount = parseInt(txt.text);
-
-        amount--;
-
-        if (amount <= 0) {
+        if (txt.collected == txt.amount) {
 
             if (this.game.cache.getFrameByName('sprites', 'goal-completed.png') !== null) {
 
@@ -132,7 +137,10 @@ class Goal extends Phaser.Group {
             }
         }
 
-        txt.setText(amount);
+        var goalText = txt.collected + "/" + txt.amount;
+
+
+        txt.setText(goalText);
 
         txt.scale.x = txt.origScale * 2;
         txt.scale.y = txt.origScale * 2;

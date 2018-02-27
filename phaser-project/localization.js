@@ -1,2 +1,2 @@
-exports.tooltip1 = 'Swipe up to make\n a rocket';
-exports.tooltip2 = 'Swipe right to \nexplode the rocket';
+exports.tooltip1 = 'Swap the Cropsies\n to match';
+exports.tooltip2 = 'Collect these apples\n to win';

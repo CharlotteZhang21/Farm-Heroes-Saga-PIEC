@@ -300,12 +300,15 @@ class Board {
 
     createTile(key, x, y, padding, arr) {
 
+        // var spriteGrp = this.game.add.group();
+
         var sprite = this.genSpriteOrAnim('pieces', key, key + '-idle', x, y, padding);
 
         sprite.settings = {
             key: key,
             x: x,
-            y: y
+            y: y,
+            plusNumber: 0
         };
 
         if (key.indexOf('booster') !== -1 && Settings[key]) {
@@ -455,7 +458,7 @@ class Board {
             });
     }
 
-    moveTo(tile, x, y, duration, easing, cb) {
+    moveTo(tile, x, y, duration, easing, cb, delay=0) {
 
         var tween = this.game.add.tween(tile).to({
                 x: x,
@@ -464,7 +467,7 @@ class Board {
             duration,
             easing,
             true,
-            0);
+            delay);
 
         if (cb) {
             tween.onComplete.add(cb, this);
@@ -565,7 +568,7 @@ class Board {
                 y * this.tileWidth,
                 key,
                 name + '.png');
-
+            
             scale = (this.tileWidth * (1 - Util.toPerc(padding))) / sprite._frame.width;
         }
 
@@ -707,6 +710,7 @@ class Board {
             if (tile.settings.destroyAnim) {
 
                 this.playAnimation(tile, tile.settings.destroyAnim);
+
             }
 
             if (typeof goalItem !== 'undefined') {
@@ -728,18 +732,6 @@ class Board {
 
 
             } else {
-
-                // if (tile.settings.destroyAnim) {
-
-                //     // this.playAnimation(tile, tile.settings.destroyAnim);
-
-                //     this.playAnimation(tile, 'piece03-destroy');
-
-                //     console.log('hello');
-                // } else {
-
-                //     this.playAnimation(tile, tile.settings.key + '-destroy');
-                // }
 
                 var anim = tile.settings.destroyAnim || tile.settings.key + '-destroy';
 
@@ -780,12 +772,21 @@ class Board {
                                 0,
                                 0,
                                 Settings.tileScaleDownOnDestroyDuration * 0.6,
-                                Phaser.Easing.Linear.None);
+                                Phaser.Easing.Back.Out);
                         });
 
                 }
 
+                // this.removeTile(tile);
+               
+               var tween = this.game.add.tween(tile.scale).to({
+                    x: 0,
+                    y: 0
+                }, 500, Phaser.Easing.Linear.None, true);
+
+               tween.onComplete.add(function(){
                 this.removeTile(tile);
+               },this);
             }
 
             if (tile.settings.onDestroyGenerate) {
@@ -809,7 +810,7 @@ class Board {
 
         var dist = (this.tileWidth * this.boardWidth) / Phaser.Math.distance(sprite.x, sprite.y, x, y);
 
-        var duration = (dist / this.flySpeed) * 60000;
+        var duration = (dist / this.flySpeed) * 80000;
 
         this.moveTo(sprite, x, y, duration, Phaser.Easing.Linear.None, function(item) {
 
@@ -820,11 +821,11 @@ class Board {
             if (cb) {
                 cb(item);
             }
-        });
+        }, 200);
 
         var tween = this.game.add.tween(sprite.scale).to({
-                x: goal.scale.x,
-                y: goal.scale.y
+                x: [sprite.scale.x * 3, goal.scale.x],
+                y: [sprite.scale.y * 3, goal.scale.y]
             },
             duration,
             Phaser.Easing.Linear.None,
@@ -1008,7 +1009,7 @@ class Board {
 
         var delay = 0;
 
-        var extraDelay = 0;
+        var extraDelay = 300;
 
         var holes = [];
 
@@ -1052,7 +1053,13 @@ class Board {
 
                     holes = holes.concat(boosterMatchResult.holes);
 
+                    holes.push(tiles[i].settings);
+
                     delay = Math.max(delay, boosterMatchResult.delay);
+
+                    extraDelay = booster.delay;
+
+                    this.playAnimation(tiles[i], booster.animation);
 
                 } else {
                     matches = matches.concat(this.addBlockerMatches(matches));
@@ -1086,6 +1093,8 @@ class Board {
         } else {
 
             this.game.time.events.add(delay + extraDelay + 50, function() {
+
+                console.log("delay" + delay + "extraDelay" +extraDelay);
 
                 var fallResults = this.fall(holes);
 
@@ -1176,7 +1185,7 @@ class Board {
 
         matches.forEach(function(m) {
 
-            this.moveToLinear(m, origTile.settings.x, origTile.settings.y, this.comboDuration);
+            // this.moveToLinear(m, origTile.settings.x, origTile.settings.y, this.comboDuration);
 
             this.removeUnderTile(m);
 
@@ -1192,46 +1201,46 @@ class Board {
 
             this.explodeMatches(matches, shouldStagger, null, true);
 
-            this.game.time.events.add(boosterGenDelay, function() {
+            // this.game.time.events.add(boosterGenDelay, function() {
 
-                var boosterTile = this.createTile(booster.key, x, y, Settings.piecePadding, this.tiles);
+            //     var boosterTile = this.createTile(booster.key, x, y, Settings.piecePadding, this.tiles);
 
-                boosterTile.settings = Util.extend(boosterTile.settings, booster);
+            //     boosterTile.settings = Util.extend(boosterTile.settings, booster);
 
-                if (boosterTile.settings.anchor) {
-                    boosterTile.anchor.set(boosterTile.settings.anchor.x, boosterTile.settings.anchor.y);
-                }
+            //     if (boosterTile.settings.anchor) {
+            //         boosterTile.anchor.set(boosterTile.settings.anchor.x, boosterTile.settings.anchor.y);
+            //     }
 
-                this.aboveLayerGrp.add(boosterTile);
+            //     this.aboveLayerGrp.add(boosterTile);
 
-                boosterTile.origScale = boosterTile.scale.x;
+            //     boosterTile.origScale = boosterTile.scale.x;
 
-                boosterTile.scale.x = 0;
-                boosterTile.scale.y = 0;
+            //     boosterTile.scale.x = 0;
+            //     boosterTile.scale.y = 0;
 
-                var tween = this.game.add.tween(boosterTile.scale).to({
-                        x: boosterTile.origScale,
-                        y: boosterTile.origScale
-                    },
-                    500,
-                    Phaser.Easing.Back.Out,
-                    true,
-                    0);
+            //     var tween = this.game.add.tween(boosterTile.scale).to({
+            //             x: boosterTile.origScale,
+            //             y: boosterTile.origScale
+            //         },
+            //         500,
+            //         Phaser.Easing.Back.Out,
+            //         true,
+            //         0);
 
-                tween.onComplete.add(function() {
+            //     tween.onComplete.add(function() {
 
-                    this.game.add.tween(boosterTile.scale).to({
-                            x: boosterTile.origScale * 1.1,
-                            y: boosterTile.origScale * 0.9
-                        },
-                        800,
-                        Phaser.Easing.Linear.None,
-                        true,
-                        0, -1).yoyo(true, 0);
+            //         this.game.add.tween(boosterTile.scale).to({
+            //                 x: boosterTile.origScale * 1.1,
+            //                 y: boosterTile.origScale * 0.9
+            //             },
+            //             800,
+            //             Phaser.Easing.Linear.None,
+            //             true,
+            //             0, -1).yoyo(true, 0);
 
-                }, this);
+            //     }, this);
 
-            }, this);
+            // }, this);
         }, this);
 
         return {
@@ -1302,7 +1311,12 @@ class Board {
 
         var tween = this.game.add.tween(t);
 
+        var tweenScale = this.game.add.tween(t.scale);
+
         var yTo = t.y + (dist * this.tileWidth * (Settings.fallUpwards === true ? -1 : 1));
+
+        var bounceScaleX = t.scale.x;
+        var bounceScaleY = t.scale.y;
 
         if (Settings.fallStyle === 'bounce') {
 
@@ -1314,6 +1328,15 @@ class Board {
                     y: yTo
                 },
                 Util.calcQuadTime(t.y - yTo) * Settings.tileBounce * tileBounceScalar * (1 / Settings.gravity),
+                function(k) {
+                    return cb.Bounce.Ease(k);
+                },
+                true);
+            tweenScale.to({
+                   x: [bounceScaleX*0.8, bounceScaleX*0.5, bounceScaleX, bounceScaleX * 1.2, bounceScaleX * 0.9, bounceScaleX * 1.1, bounceScaleX * 0.9, bounceScaleX],
+                   y: [bounceScaleY*1.2, bounceScaleY*1.5, bounceScaleY, bounceScaleY * 0.8, bounceScaleY * 1.1, bounceScaleY * 0.9, bounceScaleY * 1.1, bounceScaleY]
+                },
+                Util.calcQuadTime(t.y - yTo) *1.6 * Settings.tileBounce * tileBounceScalar * (1 / Settings.gravity),
                 function(k) {
                     return cb.Bounce.Ease(k);
                 },
@@ -1476,7 +1499,6 @@ class Board {
             if (matches.length > 1) {
 
                 this.boosters.forEach(function(b) {
-
                     b.piecesToCreate.forEach(function(ptc) {
 
                         if (ptc === matches.length) {
@@ -1489,16 +1511,22 @@ class Board {
 
                 if (boosterKey !== null) {
                     
-                    var clone = this.createTile(t.settings.key, t.settings.x, t.settings.y, Settings.piecePadding);
+                    // var clone = this.createTile(t.settings.key, t.settings.x, t.settings.y, Settings.piecePadding);
 
-                    this.aboveLayerGrp.add(clone);
+                    // this.aboveLayerGrp.add(clone);
 
-                    Tweener.fade(clone, 0, 0, 150, Phaser.Easing.Linear.None, true, function() {
+                    // Tweener.fade(clone, 0, 0, 150, Phaser.Easing.Linear.None, true, function() {
 
-                        clone.destroy();
-                    });
+                    //     clone.destroy();
+                    // });
 
-                    t.loadTexture('pieces', t.settings.key + '-' + boosterKey + '.png');
+                    // t.loadTexture('pieces', t.settings.key + '-' + boosterKey + '.png');
+
+                    //play the animation
+                    console.log(this.boosters);
+                    // this.playAnimation(matches[2], boosterKey.);
+
+                    //add the numbers to the pieces near it
                 }
             }
 
